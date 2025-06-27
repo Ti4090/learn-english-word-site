@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professional English vocabulary learning app with Turkish translations, pronunciation practice, and progress tracking">
+    <meta name="keywords" content="English vocabulary, Turkish translation, language learning, pronunciation, vocabulary builder">
+    <meta name="author" content="Vocabulary Learning App">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="English Vocabulary Learning App">
+    <meta property="og:description" content="Learn English vocabulary with Turkish translations and pronunciation practice">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="logo.svg">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="English Vocabulary Learning App">
+    <meta name="twitter:description" content="Learn English vocabulary with Turkish translations and pronunciation practice">
+    
+    <title>VocabMaster - English Vocabulary Learning App</title>
+    
+    <!-- Icons and Favicon -->
+    <link rel="icon" type="image/svg+xml" href="logo.svg">
+    <link rel="alternate icon" href="logo.svg">
+    <link rel="apple-touch-icon" href="logo.svg">
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#667eea">
+    <meta name="msapplication-TileColor" content="#667eea">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="style.css" as="style">
+    <link rel="preload" href="script.js" as="script">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Home Screen -->
+    <section id="home-screen" class="screen active">
+        <div class="container">
+            <header class="app-header">
+                <div class="logo-container">
+                    <img src="logo.svg" alt="VocabMaster Logo" class="app-logo">
+                    <h1 class="app-title">VocabMaster</h1>
+                </div>
+                <p class="app-description">Professional English vocabulary learning with Turkish translations, pronunciation practice, and intelligent progress tracking.</p>
+                <div class="app-stats" id="app-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="total-words">0</span>
+                        <span class="stat-label">Total Words</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="learned-words">0</span>
+                        <span class="stat-label">Learned</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="favorite-words">0</span>
+                        <span class="stat-label">Favorites</span>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="main-buttons">
+                <button id="start-learning-btn" class="main-btn primary">
+                    <span class="btn-icon">📚</span>
+                    Start Learning
+                </button>
+                <button id="learn-all-words-btn" class="main-btn audio">
+                    <span class="btn-icon">🔄</span>
+                    Learn All Words
+                </button>
+                <button id="practice-mode-btn" class="main-btn practice">
+                    <span class="btn-icon">🎯</span>
+                    Practice Mode
+                </button>
+                <button id="add-word-btn" class="main-btn secondary">
+                    <span class="btn-icon">➕</span>
+                    Add New Word
+                </button>
+                <button id="manage-words-btn" class="main-btn info">
+                    <span class="btn-icon">📝</span>
+                    Manage Words
+                </button>
+                <button id="view-saved-btn" class="main-btn tertiary">
+                    <span class="btn-icon">📋</span>
+                    View Saved Words
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Word Learning Screen -->
+    <section id="learning-screen" class="screen">
+        <div class="container">
+            <header class="screen-header">
+                <button id="back-to-home" class="back-btn">← Back to Home</button>
+                <h2>Word Learning</h2>
+            </header>
+            
+            <div class="word-card">
+                <div class="word-header">
+                    <h1 id="current-word" class="word-title">Select a word to start learning</h1>
+                    <button id="play-pronunciation" class="play-btn" disabled>
+                        <span class="play-icon">🔊</span>
+                        Play
+                    </button>
+                </div>
+                
+                <div id="word-content" class="word-content" style="display: none;">
+                    <div class="pronunciation-section">
+                        <strong>Pronunciation:</strong>
+                        <span id="word-pronunciation"></span>
+                    </div>
+                    
+                    <div class="meaning-section">
+                        <strong>Turkish Meaning:</strong>
+                        <p id="word-meaning"></p>
+                    </div>
+                    
+                    <div class="definition-section">
+                        <strong>English Definition:</strong>
+                        <p id="word-definition"></p>
+                    </div>
+                    
+                    <div class="synonyms-section">
+                        <strong>Synonyms:</strong>
+                        <p id="word-synonyms"></p>
+                    </div>
+                    
+                    <div class="antonyms-section">
+                        <strong>Antonyms:</strong>
+                        <p id="word-antonyms"></p>
+                    </div>
+                    
+                    <div class="examples-section">
+                        <strong>Example Sentences:</strong>
+                        <div id="word-examples"></div>
+                    </div>
+                    
+                    <div class="image-section">
+                        <img id="word-image" alt="Word illustration" style="display: none;">
+                    </div>
+                    
+                    <div class="word-actions">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="favorite-checkbox">
+                            <span class="checkmark">❤️</span>
+                            Favorite
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="learned-checkbox">
+                            <span class="checkmark">✅</span>
+                            Learned
+                        </label>
+                    </div>
+                    
+                    <div class="learning-tools">
+                        <div class="quiz-section">
+                            <h3>Quick Quiz</h3>
+                            <div class="quiz-container" id="quiz-container">
+                                <div class="quiz-question" id="quiz-question">What does this word mean?</div>
+                                <div class="quiz-options" id="quiz-options"></div>
+                                <button id="check-answer" class="quiz-btn">Check Answer</button>
+                                <div class="quiz-result" id="quiz-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="memory-aids">
+                            <h3>Memory Aids</h3>
+                            <div class="memory-techniques">
+                                <button id="generate-mnemonic" class="memory-btn" data-tooltip="Generate memory tricks">🧠 Mnemonic</button>
+                                <button id="word-association" class="memory-btn" data-tooltip="Find similar words">🔗 Associations</button>
+                                <button id="etymology" class="memory-btn" data-tooltip="Word origin and history">📚 Etymology</button>
+                            </div>
+                            <div id="memory-content" class="memory-content"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="navigation-buttons">
+                        <button id="prev-word" class="nav-btn">← Previous</button>
+                        <button id="random-word" class="nav-btn" data-tooltip="Study random word">🎲 Random</button>
+                        <button id="save-word" class="save-btn">Save Word</button>
+                        <button id="next-word" class="nav-btn">Next →</button>
+                    </div>
+                </div>
+                
+                <div id="no-words-message" class="no-words">
+                    <p>No words available. Add some words to start learning!</p>
+                    <button id="add-first-word" class="main-btn primary">Add Your First Word</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Learn All Words Screen -->
+    <section id="learn-all-screen" class="screen">
+        <div class="container">
+            <header class="screen-header">
+                <button id="back-to-home-audio" class="back-btn">← Back to Home</button>
+                <h2>Learn All Words - Audio Mode</h2>
+            </header>
+            
+            <div class="audio-learning-container">
+                <div class="audio-controls">
+                    <h3>Audio Learning Settings</h3>
+                    <div class="audio-settings">
+                        <div class="setting-group">
+                            <label for="word-delay">Delay between words (seconds):</label>
+                            <input type="range" id="word-delay" min="2" max="10" value="3">
+                            <span id="delay-value">3s</span>
+                        </div>
+                        
+                        <div class="setting-group">
+                            <label for="repeat-count">Repeat each word:</label>
+                            <select id="repeat-count">
+                                <option value="1">1 time</option>
+                                <option value="2" selected>2 times</option>
+                                <option value="3">3 times</option>
+                                <option value="5">5 times</option>
+                                <option value="10">10 times</option>
+                                <option value="25">25 times</option>
+                                <option value="50">50 times</option>
+                                <option value="100">100 times</option>
+                            </select>
+                        </div>
+                        
+                        <div class="setting-group">
+                            <label>Background music:</label>
+                            <div class="music-options">
+                                <button id="music-none" class="music-btn active">No Music</button>
+                                <button id="music-nature" class="music-btn">Nature Sounds</button>
+                                <button id="music-rain" class="music-btn">Rain</button>
+                                <button id="music-ocean" class="music-btn">Ocean Waves</button>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-group device-music-section">
+                            <label for="device-music">Upload your own music:</label>
+                            <div class="device-music-controls">
+                                <input type="file" id="device-music" accept="audio/*">
+                                <button id="test-device-music" class="music-btn" style="display: none;">Test Music</button>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-group">
+                            <label for="music-volume">Background music volume:</label>
+                            <input type="range" id="music-volume" min="0" max="100" value="30">
+                            <span id="volume-value">30%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="audio-player-controls">
+                        <button id="start-audio-learning" class="main-btn primary">
+                            <span class="btn-icon">▶️</span>
+                            Start Audio Learning
+                        </button>
+                        <button id="pause-audio-learning" class="main-btn secondary" style="display: none;">
+                            <span class="btn-icon">⏸️</span>
+                            Pause Learning
+                        </button>
+                        <button id="stop-audio-learning" class="main-btn tertiary" style="display: none;">
+                            <span class="btn-icon">⏹️</span>
+                            Stop Learning
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="current-audio-word">
+                    <div class="word-display-audio">
+                        <h2 id="audio-current-word">Ready to start</h2>
+                        <p id="audio-current-meaning">Select your settings and press start</p>
+                        <div class="progress-indicator">
+                            <span id="audio-progress">0 / 0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Word Management Screen -->
+    <section id="manage-words-screen" class="screen">
+        <div class="container">
+            <header class="screen-header">
+                <button id="back-to-home-manage" class="back-btn">← Back to Home</button>
+                <h2>Manage Your Words</h2>
+            </header>
+            
+            <div class="word-management-container">
+                <div class="management-controls">
+                    <div class="search-filter-section">
+                        <input type="text" id="manage-search" placeholder="Search your words..." class="search-input">
+                        <select id="manage-level-filter" class="level-filter">
+                            <option value="">All Levels</option>
+                            <option value="A1">A1 - Beginner</option>
+                            <option value="A2">A2 - Elementary</option>
+                            <option value="B1">B1 - Intermediate</option>
+                            <option value="B2">B2 - Upper-Intermediate</option>
+                            <option value="C1">C1 - Advanced</option>
+                        </select>
+                    </div>
+                    
+                    <div class="bulk-actions">
+                        <button id="select-all-words" class="action-btn">Select All</button>
+                        <button id="delete-selected" class="action-btn danger">Delete Selected</button>
+                        <button id="export-selected" class="action-btn info">Export Selected</button>
+                    </div>
+                </div>
+                
+                <div class="words-grid" id="words-management-grid">
+                    <!-- Words will be populated here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Practice Mode Screen -->
+    <section id="practice-mode-screen" class="screen">
+        <div class="container">
+            <header class="screen-header">
+                <button id="back-to-home-practice" class="back-btn">← Back to Home</button>
+                <h2>Practice Mode</h2>
+            </header>
+            
+            <div class="practice-dashboard">
+                <div class="practice-stats">
+                    <div class="practice-stat">
+                        <span class="stat-number" id="practice-score">0</span>
+                        <span class="stat-label">Score</span>
+                    </div>
+                    <div class="practice-stat">
+                        <span class="stat-number" id="practice-streak">0</span>
+                        <span class="stat-label">Streak</span>
+                    </div>
+                    <div class="practice-stat">
+                        <span class="stat-number" id="practice-level">1</span>
+                        <span class="stat-label">Level</span>
+                    </div>
+                </div>
+                
+                <div class="practice-modes">
+                    <button id="flashcard-mode" class="practice-mode-btn">
+                        <span class="mode-icon">🃏</span>
+                        <h3>Flashcards</h3>
+                        <p>Quick recall practice</p>
+                    </button>
+                    <button id="spelling-mode" class="practice-mode-btn">
+                        <span class="mode-icon">✍️</span>
+                        <h3>Spelling Test</h3>
+                        <p>Type the correct word</p>
+                    </button>
+                    <button id="multiple-choice-mode" class="practice-mode-btn">
+                        <span class="mode-icon">❓</span>
+                        <h3>Multiple Choice</h3>
+                        <p>Choose the right answer</p>
+                    </button>
+                    <button id="listening-mode" class="practice-mode-btn">
+                        <span class="mode-icon">🎧</span>
+                        <h3>Listening</h3>
+                        <p>Hear and identify words</p>
+                    </button>
+                </div>
+                
+                <div class="practice-content" id="practice-content" style="display: none;">
+                    <div class="practice-nav">
+                        <button id="back-to-practice-modes" class="back-btn secondary">← Back to Practice Modes</button>
+                        <span id="current-practice-mode">Practice Mode</span>
+                    </div>
+                    <div class="practice-question" id="practice-question"></div>
+                    <div class="practice-input" id="practice-input"></div>
+                    <div class="practice-feedback" id="practice-feedback"></div>
+                    <div class="practice-controls">
+                        <button id="practice-hint" class="hint-btn">💡 Hint</button>
+                        <button id="practice-skip" class="skip-btn">⏭️ Skip</button>
+                        <button id="practice-submit" class="submit-btn">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Add New Word Screen -->
+    <section id="add-word-screen" class="screen">
+        <div class="container">
+            <header class="screen-header">
+                <button id="cancel-add-word" class="back-btn">← Cancel</button>
+                <h2>Add New Word</h2>
+            </header>
+            
+            <form id="add-word-form" class="word-form">
+                <div class="form-group required">
+                    <label for="new-word">English Word</label>
+                    <input type="text" id="new-word" required autocomplete="off" spellcheck="true">
+                    <span class="error-message" id="word-error"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="new-pronunciation">Pronunciation <span class="tooltip" data-tooltip="Use IPA notation or phonetic spelling">?</span></label>
+                    <input type="text" id="new-pronunciation" placeholder="e.g., /həˈloʊ/ or huh-LOH" autocomplete="off">
+                </div>
+                
+                <div class="form-group required">
+                    <label for="new-meaning">Turkish Meaning</label>
+                    <input type="text" id="new-meaning" required autocomplete="off" spellcheck="true">
+                    <span class="error-message" id="meaning-error"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="new-definition">English Definition</label>
+                    <textarea id="new-definition" rows="3" placeholder="Define the word in English..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="new-synonyms">Synonyms</label>
+                    <input type="text" id="new-synonyms" placeholder="word1, word2, word3">
+                </div>
+                
+                <div class="form-group">
+                    <label for="new-antonyms">Antonyms</label>
+                    <input type="text" id="new-antonyms" placeholder="word1, word2, word3">
+                </div>
+                
+                <div class="form-group">
+                    <label for="new-examples">Example Sentences</label>
+                    <textarea id="new-examples" rows="4" placeholder="Enter example sentences, each on a new line..."></textarea>
+                </div>
+                
+                <div class="form-group required">
+                    <label for="new-level">Word Level <span class="tooltip" data-tooltip="CEFR levels: A1=Beginner, C1=Advanced">?</span></label>
+                    <select id="new-level" required>
+                        <option value="">Select Level</option>
+                        <option value="A1">A1 - Beginner</option>
+                        <option value="A2">A2 - Elementary</option>
+                        <option value="B1">B1 - Intermediate</option>
+                        <option value="B2">B2 - Upper Intermediate</option>
+                        <option value="C1">C1 - Advanced</option>
+                    </select>
+                    <span class="error-message" id="level-error"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="new-image">Upload Image</label>
+                    <input type="file" id="new-image" accept="image/*">
+                    <div id="image-preview"></div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" id="cancel-form" class="cancel-btn">Cancel</button>
+                    <button type="submit" class="submit-btn">Add Word</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Saved Words Side Panel -->
+    <div id="saved-words-panel" class="side-panel">
+        <div class="panel-header">
+            <h3>Saved Words</h3>
+            <button id="close-panel" class="close-btn">×</button>
+        </div>
+        
+        <div class="panel-controls">
+            <div class="search-group">
+                <input type="text" id="search-words" placeholder="Search words...">
+            </div>
+            <div class="filter-group">
+                <select id="filter-level">
+                    <option value="">All Levels</option>
+                    <option value="A1">A1</option>
+                    <option value="A2">A2</option>
+                    <option value="B1">B1</option>
+                    <option value="B2">B2</option>
+                    <option value="C1">C1</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="panel-actions">
+            <button id="download-txt" class="action-btn">📄 Download TXT</button>
+            <button id="backup-json" class="action-btn">💾 Backup JSON</button>
+            <input type="file" id="restore-json" accept=".json" style="display: none;">
+            <button id="restore-btn" class="action-btn">📂 Restore</button>
+        </div>
+        
+        <div id="saved-words-list" class="words-list">
+            <div id="no-saved-words" class="no-words">
+                <p>No saved words yet. Start learning and save your first word!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay for side panel -->
+    <div id="panel-overlay" class="overlay"></div>
+
+    <!-- Toast notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
